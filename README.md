@@ -10,6 +10,7 @@ Documentation to follow.
 
 ### fileserver
 
+```
 go run -mod vendor cmd/fileserver/main.go -h
 
   -cors-origins string
@@ -22,7 +23,7 @@ go run -mod vendor cmd/fileserver/main.go -h
     	A valid path to serve files from
   -server-uri string
     	A valid aaronland/go-http-server URI. Registered schemes are: HTTP,HTTPS,LAMBDA,MKCERT,TLS (default "http://localhost:8080")
-exit status 2
+```
 
 ## See also
 
