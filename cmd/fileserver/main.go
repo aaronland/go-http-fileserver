@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"github.com/aaronland/go-http-server"
 	"github.com/aaronland/go-http-fileserver"
 	"log"
@@ -12,13 +13,17 @@ import (
 
 func main() {
 
-	server_uri := flag.String("server-uri", "http://localhost:8080", "...")
-	root := flag.String("root", "", "...")
+	schemes := server.SchemesAsString()
 
-	enable_cors := flag.Bool("enable-cors", false, "...")
-	enable_gzip := flag.Bool("enable-gzip", false, "...")
+	server_desc := fmt.Sprintf("A valid aaronland/go-http-server URI. Registered schemes are: %s", schemes)
+	
+	server_uri := flag.String("server-uri", "http://localhost:8080", server_desc)
+	root := flag.String("root", "", "A valid path to serve files from")
 
-	cors_origins := flag.String("cors-origins", "*", "...")
+	enable_cors := flag.Bool("enable-cors", false, "Enable CORS headers on responses.")
+	enable_gzip := flag.Bool("enable-gzip", false, "Enable gzip-ed responses.")
+
+	cors_origins := flag.String("cors-origins", "*", "A comma-separated of origins to allow CORS requests from.")
 
 	flag.Parse()
 
