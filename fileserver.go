@@ -2,12 +2,12 @@ package fileserver
 
 import (
 	"errors"
+	"fmt"
 	"github.com/NYTimes/gziphandler"
 	"github.com/rs/cors"
 	"net/http"
 	"os"
 	"path/filepath"
-	"fmt"
 )
 
 type FileServerOptions struct {

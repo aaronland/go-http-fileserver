@@ -19,6 +19,8 @@ go run -mod vendor cmd/fileserver/main.go -h
     	Enable CORS headers on responses.
   -enable-gzip
     	Enable gzip-ed responses.
+  -prefix string
+    	A prefix to append to URL to serve requests from.	
   -root string
     	A valid path to serve files from
   -server-uri string

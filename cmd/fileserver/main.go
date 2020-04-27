@@ -4,10 +4,11 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/aaronland/go-http-server"
 	"github.com/aaronland/go-http-fileserver"
+	"github.com/aaronland/go-http-server"
 	"log"
 	"net/http"
+	"path/filepath"
 	"strings"
 )
 
@@ -15,10 +16,11 @@ func main() {
 
 	schemes := server.SchemesAsString()
 
-	server_desc := fmt.Sprintf("A valid aaronland/go-http-server URI. Registered schemes are: %s", schemes)
-	
+	server_desc := fmt.Sprintf("A valid aaronland/go-http-server URI. Registered schemes are: %s.", schemes)
+
 	server_uri := flag.String("server-uri", "http://localhost:8080", server_desc)
-	root := flag.String("root", "", "A valid path to serve files from")
+	root := flag.String("root", "", "A valid path to serve files from.")
+	prefix := flag.String("prefix", "", "A prefix to append to URL to serve requests from.")
 
 	enable_cors := flag.Bool("enable-cors", false, "Enable CORS headers on responses.")
 	enable_gzip := flag.Bool("enable-gzip", false, "Enable gzip-ed responses.")
@@ -52,8 +54,24 @@ func main() {
 		log.Fatalf("Unable to create fileserver handler, %v", err)
 	}
 
+	uri := "/"
+
+	if *prefix != "" {
+
+		if !strings.HasPrefix(*prefix, "/") {
+			log.Fatalf("Invalid prefix. Missing leading /")
+		}
+
+		fs_handler = http.StripPrefix(*prefix, fs_handler)
+		uri = filepath.Join(uri, *prefix)
+	}
+
+	if !strings.HasSuffix(uri, "/") {
+		uri = fmt.Sprintf("%s/", uri)
+	}
+
 	mux := http.NewServeMux()
-	mux.Handle("/", fs_handler)
+	mux.Handle(uri, fs_handler)
 
 	log.Printf("Listening on %s", s.Address())
 
