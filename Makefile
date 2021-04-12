@@ -1,3 +1,6 @@
+cli:
+	go build -mod vendor -o bin/fileserver cmd/fileserver/main.go
+
 dist-build:
 	OS=darwin make dist-os
 	OS=windows make dist-os
