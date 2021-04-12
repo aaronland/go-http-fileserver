@@ -15,5 +15,8 @@ github.com/aws/aws-lambda-go/lambdacontext
 # github.com/rs/cors v1.7.0
 ## explicit
 github.com/rs/cors
+# github.com/sfomuseum/go-flags v0.8.2
+## explicit
+github.com/sfomuseum/go-flags/multi
 # github.com/whosonfirst/algnhsa v0.1.0
 github.com/whosonfirst/algnhsa

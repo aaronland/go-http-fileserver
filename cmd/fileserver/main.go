@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/aaronland/go-http-fileserver"
 	"github.com/aaronland/go-http-server"
+	"github.com/sfomuseum/go-flags/multi"
 	"log"
 	"net/http"
 	"path/filepath"
@@ -26,6 +27,9 @@ func main() {
 	enable_gzip := flag.Bool("enable-gzip", false, "Enable gzip-ed responses.")
 
 	cors_origins := flag.String("cors-origins", "*", "A comma-separated of origins to allow CORS requests from.")
+
+	var mimetypes multi.KeyValueString
+	flag.Var(&mimetypes, "mimetype", "One or more key=value pairs mapping a file extension to a specific content (or mime) type to assign for that request")
 
 	flag.Parse()
 
@@ -70,8 +74,37 @@ func main() {
 		uri = fmt.Sprintf("%s/", uri)
 	}
 
+	root_handler := fs_handler
+
+	//
+
+	if len(mimetypes) > 0 {
+
+		log.Println("M")
+		matches := make(map[string]string)
+
+		for _, kv := range mimetypes {
+
+			matches[kv.Key()] = kv.Value().(string)
+		}
+
+		ct_opts := &fileserver.ContentTypeOptions{
+			Matches: matches,
+		}
+
+		ct_handler, err := fileserver.NewContentTypeHandler(ct_opts, fs_handler)
+
+		if err != nil {
+			log.Fatalf("Failed to create new content type handler, %v", err)
+		}
+
+		root_handler = ct_handler
+	}
+
+	//
+
 	mux := http.NewServeMux()
-	mux.Handle(uri, fs_handler)
+	mux.Handle(uri, root_handler)
 
 	log.Printf("Listening on %s", s.Address())
 

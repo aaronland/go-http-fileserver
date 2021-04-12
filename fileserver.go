@@ -17,6 +17,31 @@ type FileServerOptions struct {
 	EnableGzip  bool
 }
 
+type ContentTypeOptions struct {
+	Matches map[string]string
+}
+
+func NewContentTypeHandler(opts *ContentTypeOptions, next http.Handler) (http.Handler, error) {
+
+	fn := func(rsp http.ResponseWriter, req *http.Request) {
+
+		uri := req.RequestURI
+		ext := filepath.Ext(uri)
+
+		for re_ext, content_type := range opts.Matches {
+
+			if ext == re_ext {
+				rsp.Header().Set("Content-Type", content_type)
+				break
+			}
+		}
+
+		next.ServeHTTP(rsp, req)
+	}
+
+	return http.HandlerFunc(fn), nil
+}
+
 func NewFileServerHandler(opts *FileServerOptions) (http.Handler, error) {
 
 	abs_root, err := filepath.Abs(opts.Root)
