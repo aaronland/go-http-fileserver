@@ -12,7 +12,7 @@ github.com/aws/aws-lambda-go/lambda
 github.com/aws/aws-lambda-go/lambda/handlertrace
 github.com/aws/aws-lambda-go/lambda/messages
 github.com/aws/aws-lambda-go/lambdacontext
-# github.com/rs/cors v1.7.0
+# github.com/rs/cors v1.8.0
 ## explicit
 github.com/rs/cors
 # github.com/sfomuseum/go-flags v0.8.2
