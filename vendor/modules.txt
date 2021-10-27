@@ -1,7 +1,7 @@
 # github.com/NYTimes/gziphandler v1.1.1
 ## explicit
 github.com/NYTimes/gziphandler
-# github.com/aaronland/go-http-server v0.0.6
+# github.com/aaronland/go-http-server v0.0.7
 ## explicit
 github.com/aaronland/go-http-server
 # github.com/aaronland/go-roster v0.0.2
