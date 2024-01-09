@@ -1,5 +1,8 @@
+GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
+LDFLAGS=-s -w
+
 cli:
-	go build -mod vendor -o bin/fileserver cmd/fileserver/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/fileserver cmd/fileserver/main.go
 
 dist-build:
 	OS=darwin make dist-os
@@ -9,5 +12,5 @@ dist-build:
 dist-os:
 	@echo "build tools for $(OS)"
 	mkdir -p dist/$(OS)
-	GOOS=$(OS) GOARCH=386 go build -mod vendor -o dist/$(OS)/fileserver cmd/fileserver/main.go
+	GOOS=$(OS) GOARCH=386 go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o dist/$(OS)/fileserver cmd/fileserver/main.go
 	chmod +x dist/$(OS)/fileserver

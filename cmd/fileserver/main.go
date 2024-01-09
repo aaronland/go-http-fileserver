@@ -4,20 +4,22 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"github.com/aaronland/go-http-fileserver"
-	"github.com/aaronland/go-http-server"
-	"github.com/sfomuseum/go-flags/multi"
 	"log"
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	"github.com/aaronland/go-http-fileserver"
+	"github.com/aaronland/go-http-server"
+	"github.com/sfomuseum/go-flags/multi"	
 )
 
 func main() {
 
-	schemes := server.SchemesAsString()
-
-	server_desc := fmt.Sprintf("A valid aaronland/go-http-server URI. Registered schemes are: %s.", schemes)
+	schemes := server.Schemes()
+	str_schemes := strings.Join(schemes, ", ")
+	
+	server_desc := fmt.Sprintf("A valid aaronland/go-http-server URI. Registered schemes are: %s.", str_schemes)
 
 	server_uri := flag.String("server-uri", "http://localhost:8080", server_desc)
 	root := flag.String("root", "", "A valid path to serve files from.")
