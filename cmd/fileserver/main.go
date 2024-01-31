@@ -6,19 +6,20 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/aaronland/go-http-fileserver"
 	"github.com/aaronland/go-http-server"
-	"github.com/sfomuseum/go-flags/multi"	
+	"github.com/sfomuseum/go-flags/multi"
 )
 
 func main() {
 
 	schemes := server.Schemes()
 	str_schemes := strings.Join(schemes, ", ")
-	
+
 	server_desc := fmt.Sprintf("A valid aaronland/go-http-server URI. Registered schemes are: %s.", str_schemes)
 
 	server_uri := flag.String("server-uri", "http://localhost:8080", server_desc)
@@ -44,7 +45,14 @@ func main() {
 	}
 
 	if *root == "" {
-		log.Fatalf("Missing -root")
+
+		cwd, err := os.Getwd()
+
+		if err != nil {
+			log.Fatalf("Failed to derive current working directory, %v", err)
+		}
+
+		*root = cwd
 	}
 
 	fs_opts := &fileserver.FileServerOptions{
@@ -108,7 +116,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.Handle(uri, root_handler)
 
-	log.Printf("Listening on %s", s.Address())
+	log.Printf("Serving %s and listening for requests on %s", *root, s.Address())
 
 	err = s.ListenAndServe(ctx, mux)
 
