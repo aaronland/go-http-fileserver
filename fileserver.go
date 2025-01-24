@@ -42,6 +42,20 @@ func NewContentTypeHandler(opts *ContentTypeOptions, next http.Handler) (http.Ha
 	return http.HandlerFunc(fn), nil
 }
 
+func NewWithHeadersHandler(headers map[string]string, next http.Handler) (http.Handler, error) {
+
+	fn := func(rsp http.ResponseWriter, req *http.Request) {
+
+		for k, v := range headers {
+			rsp.Header().Set(k, v)
+		}
+
+		next.ServeHTTP(rsp, req)
+	}
+
+	return http.HandlerFunc(fn), nil
+}
+
 func NewFileServerHandler(opts *FileServerOptions) (http.Handler, error) {
 
 	abs_root, err := filepath.Abs(opts.Root)

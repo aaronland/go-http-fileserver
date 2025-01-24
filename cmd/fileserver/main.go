@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	"github.com/aaronland/go-http-fileserver"
-	"github.com/aaronland/go-http-server"
+	"github.com/aaronland/go-http-server/v2"
 	"github.com/sfomuseum/go-flags/multi"
 )
 
@@ -33,6 +33,9 @@ func main() {
 
 	var mimetypes multi.KeyValueString
 	flag.Var(&mimetypes, "mimetype", "One or more key=value pairs mapping a file extension to a specific content (or mime) type to assign for that request")
+
+	var header_flags multi.KeyValueString
+	flag.Var(&header_flags, "header", "Zero or more key=value pairs to assign to the response headers for requests.")
 
 	flag.Parse()
 
@@ -102,13 +105,31 @@ func main() {
 			Matches: matches,
 		}
 
-		ct_handler, err := fileserver.NewContentTypeHandler(ct_opts, fs_handler)
+		h, err := fileserver.NewContentTypeHandler(ct_opts, root_handler)
 
 		if err != nil {
 			log.Fatalf("Failed to create new content type handler, %v", err)
 		}
 
-		root_handler = ct_handler
+		root_handler = h
+	}
+
+	if len(header_flags) > 0 {
+
+		headers := make(map[string]string)
+
+		for _, kv := range header_flags {
+			headers[kv.Key()] = kv.Value().(string)
+		}
+
+		h, err := fileserver.NewWithHeadersHandler(headers, root_handler)
+
+		if err != nil {
+			log.Fatalf("Failed to create new content type handler, %v", err)
+		}
+
+		root_handler = h
+
 	}
 
 	//
