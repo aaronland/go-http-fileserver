@@ -90,7 +90,6 @@ func main() {
 
 	if len(mimetypes) > 0 {
 
-		log.Println("M")
 		matches := make(map[string]string)
 
 		for _, kv := range mimetypes {

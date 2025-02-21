@@ -1,6 +1,6 @@
 # go-http-fileserver
 
-There are many Go HTTP file server tools. This one is ours.
+There are many Go HTTP file server tools. This one is mine.
 
 ## Important
 
@@ -27,6 +27,18 @@ Usage of ./bin/fileserver:
     	A valid path to serve files from.
   -server-uri string
     	A valid aaronland/go-http-server URI. Registered schemes are: HTTP,HTTPS,LAMBDA,MKCERT,TLS. (default "http://localhost:8080")
+```
+
+#### Example
+
+```
+$> make debug
+fileserver -root ./www \
+	-mimetype js=text/javascript \
+	-mimetype wasm=application/wasm \
+	-enable-cors
+	
+2025/02/21 11:30:54 Serving ./www and listening for requests on http://localhost:8080
 ```
 
 ## See also
