@@ -8,6 +8,11 @@ Documentation to follow.
 
 ## Tools
 
+```
+$> make cli
+go build -mod vendor -ldflags="-s -w" -o bin/fileserver cmd/fileserver/main.go
+```
+
 ### fileserver
 
 ```
